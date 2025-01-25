@@ -1,0 +1,161 @@
+https://mermaid-js.github.io/mermaid-live-editor/
+
+************************************************************
+*************** Diagram 1: Registration Flow ***************
+
+flowchart TD
+    subgraph Client
+        Register_Request[Register Request]
+    end
+
+    subgraph Server
+        Security_Filter_Chain[SecurityFilterChain]
+        Register_Controller[Register Controller]
+        Register_Service[Register Service]
+        Register_Repo[Register Repo]
+    end
+
+    subgraph Response
+        response_with_success[Response with Success]
+    end
+
+    Register_Request --> Security_Filter_Chain
+    Security_Filter_Chain --> Register_Controller
+    Register_Controller --> Register_Service
+    Register_Service --> Register_Repo
+    Register_Repo --> response_with_success
+
+*****************************************************
+*************** Diagram 2: Login Flow ***************
+flowchart TD
+    subgraph Client
+        Login_Request[Login Request with Cred]
+    end
+
+    subgraph Server
+        Security_Filter_Chain[SecurityFilterChain]
+        Login_Controller[Login Controller]
+        Login_Service[Login Service]
+        Authentication_Manager[Authentication Manager]
+        Authentication_Provider[Authentication Provider]
+        User_Details_Service[User Details Service]
+        JWT_Service[JWT Service]
+    end
+
+    subgraph Response
+        login_response_with_jwttoken[Login Response with jwttoken]
+    end
+
+    Login_Request --> Security_Filter_Chain
+    Security_Filter_Chain --> Login_Controller
+    Login_Controller --> Login_Service
+    Login_Service --> Authentication_Manager
+    Authentication_Manager --> Authentication_Provider
+    Authentication_Provider --> User_Details_Service
+    User_Details_Service --> Authentication_Provider
+    Authentication_Provider --> Authentication_Manager
+    Authentication_Manager --> Login_Service
+    Login_Service --> Login_Controller
+    Login_Service --> JWT_Service
+    JWT_Service --> Login_Service
+    Login_Controller --> login_response_with_jwttoken
+
+****************************************************************
+*************** Diagram 3: Request with JWT Flow ***************
+flowchart TD
+    subgraph Client
+        Request_with_JWT[Request with JWT Token]
+    end
+
+    subgraph Server
+        Security_Filter_Chain[SecurityFilterChain]
+        JWT_Filter[JWT Filter]
+        JWT_Service[JWT Service]
+        Authentication_Manager[Authentication Manager]
+        Authentication_Provider[Authentication Provider]
+        User_Details_Service[User Details Service]
+        Security_Context_Holder[Security Context Holder]
+        Protected_Resource_Controller[Protected Resource Controller]
+    end
+
+    subgraph Response
+        response_with_data[Response with Data]
+    end
+
+    Request_with_JWT --> Security_Filter_Chain
+    Security_Filter_Chain --> JWT_Filter
+    JWT_Filter --> JWT_Service
+    JWT_Service --> JWT_Filter
+    JWT_Filter --> Authentication_Manager
+    Authentication_Manager --> Authentication_Provider
+    Authentication_Provider --> User_Details_Service
+    User_Details_Service --> JWT_Filter
+    JWT_Filter --> Security_Context_Holder
+    Security_Context_Holder --> Protected_Resource_Controller
+    Protected_Resource_Controller --> Security_Filter_Chain
+    Security_Filter_Chain --> response_with_data
+
+**********************************************************************
+************************** Diagram All *******************************
+
+flowchart TD
+    subgraph Client
+        Register_Request[Register Request]
+        Login_Request[Login Request]
+        Request_with_JWT[Request with JWT]
+    end
+
+    subgraph Server
+        Security_Filter_Chain[SecurityFilterChain]
+        Register_Controller[Register Controller]
+        Register_Service[Register Service]
+        Register_Repo[Register Repo]
+        Login_Controller[Login Controller]
+        Login_Service[Login Service]
+        Authentication_Manager[Authentication Manager]
+        Authentication_Provider[Authentication Provider]
+        User_Details_Service[User Details Service]
+        JWT_Service[JWT Service]
+        JWT_Filter[JWT Filter]
+        Security_Context_Holder[Security Context Holder]
+        Protected_Resource_Controller[Protected Resource Controller]
+    end
+
+    subgraph Response
+        response_with_success[Response with Success]
+        login_response_with_jwttoken[Login Response with jwttoken]
+        response_with_data[Response with Data]
+    end
+
+    Register_Request --> Security_Filter_Chain
+    Security_Filter_Chain --> Register_Controller
+    Register_Controller --> Register_Service
+    Register_Service --> Register_Repo
+    Register_Repo --> response_with_success
+
+    Login_Request --> Security_Filter_Chain
+    Security_Filter_Chain --> Login_Controller
+    Login_Controller --> Login_Service
+    Login_Service --> Authentication_Manager
+    Authentication_Manager --> Authentication_Provider
+    Authentication_Provider --> User_Details_Service
+    User_Details_Service --> Authentication_Provider
+    Authentication_Provider --> Authentication_Manager
+    Authentication_Manager --> Login_Service
+    Login_Service --> Login_Controller
+    Login_Controller --> JWT_Service
+    JWT_Service --> Login_Controller
+    Login_Controller --> login_response_with_jwttoken
+
+    Request_with_JWT --> Security_Filter_Chain
+    Security_Filter_Chain --> JWT_Filter
+    JWT_Filter --> JWT_Service
+    JWT_Service --> JWT_Filter
+    JWT_Filter --> Authentication_Manager
+    Authentication_Manager --> Authentication_Provider
+    Authentication_Provider --> User_Details_Service
+    User_Details_Service --> JWT_Filter
+    JWT_Filter --> Security_Context_Holder
+    Security_Context_Holder --> Protected_Resource_Controller
+    Protected_Resource_Controller --> Security_Filter_Chain
+    Security_Filter_Chain --> response_with_data
